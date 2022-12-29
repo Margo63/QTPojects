@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=ru.auroraos.changeColor
+Exec=/usr/bin/ru.auroraos.changeColor
+Name=Template
+Name[ru]=Шаблон
+
+[X-Application]
+Permissions=
+OrganizationName=ru.auroraos
+ApplicationName=changeColor
+ExecDBus=/usr/bin/ru.auroraos.changeColor
