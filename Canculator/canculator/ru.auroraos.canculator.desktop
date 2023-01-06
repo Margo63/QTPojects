@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=ru.auroraos.canculator
+Exec=/usr/bin/ru.auroraos.canculator
+Name=Canculator
+Name[ru]=Шаблон
+
+[X-Application]
+Permissions=
+OrganizationName=ru.auroraos
+ApplicationName=canculator
+ExecDBus=/usr/bin/ru.auroraos.canculator
