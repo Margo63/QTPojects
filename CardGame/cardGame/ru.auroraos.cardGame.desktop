@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=ru.auroraos.cardGame
+Exec=/usr/bin/ru.auroraos.cardGame
+Name=cardGame
+Name[ru]=Шаблон
+
+[X-Application]
+Permissions=
+OrganizationName=ru.auroraos
+ApplicationName=cardGame
+ExecDBus=/usr/bin/ru.auroraos.cardGame
