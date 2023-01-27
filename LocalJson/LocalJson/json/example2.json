@@ -1,0 +1,48 @@
+{
+    "test": {
+        "biology": [
+            "q1": {
+                "question": "формула рибофловина",
+                "response_options": [
+                    "C17H20N4O6",
+                    "C6H5NO2",
+                    "C6H8O7",
+                    "CH2O2"
+                ],
+                "answer": "C17H20N4O6"
+            },
+	   "q2":{
+		"question": "К жирорастворимым витаминам относится",
+                "response_options": [
+                    "B",
+                    "C",
+                    "K",
+                    "H"
+                ]
+                "answer": "K"
+	    }
+        ],
+        "maths": [
+            "q1": {
+                "question": "sqrt(121)",
+                "response_options": [
+                    "12",
+                    "21",
+                    "11",
+                    "111"
+                ],
+                "answer": "11"
+            },
+            "q2": {
+                "question": "2^10 = ?",
+                "response_options": [
+                    "200",
+                    "20",
+                    "8",
+                    "1024"
+                ],
+                "answer": "1024"
+            }
+        }
+    ]
+}
