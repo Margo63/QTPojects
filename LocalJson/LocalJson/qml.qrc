@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>json/example1.json</file>
+        <file>json/example2.json</file>
+    </qresource>
+</RCC>
