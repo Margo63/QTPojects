@@ -799,7 +799,14 @@ favorite.o: ../CatApiFavorite3/favorite.cpp ../CatApiFavorite3/favorite.h \
 main.o: ../CatApiFavorite3/main.cpp ../../../Felgo/Felgo/clang_64/lib/QtGui.framework/Headers/QGuiApplication \
 		../../../Felgo/Felgo/clang_64/lib/QtGui.framework/Headers/qguiapplication.h \
 		../../../Felgo/Felgo/clang_64/lib/QtQml.framework/Headers/QQmlApplicationEngine \
-		../../../Felgo/Felgo/clang_64/lib/QtQml.framework/Headers/qqmlapplicationengine.h
+		../../../Felgo/Felgo/clang_64/lib/QtQml.framework/Headers/qqmlapplicationengine.h \
+		../CatApiFavorite3/favorite.h \
+		../../../Felgo/Felgo/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../Felgo/Felgo/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../../Felgo/Felgo/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		../../../Felgo/Felgo/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+		../../../Felgo/Felgo/clang_64/lib/QtGui.framework/Headers/QColor \
+		../../../Felgo/Felgo/clang_64/lib/QtGui.framework/Headers/qcolor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../CatApiFavorite3/main.cpp
 
 qrc_qml.o: qrc_qml.cpp 

@@ -55,7 +55,7 @@ QHash<int, QByteArray> Favorite::roleNames() const
 
 void Favorite::addCatImageList(QString id, QString url)
 {
-
+//проверка на валидность
     if(id!="" && url!=""){
         //qDebug()<<id<<" "<<url;
         beginInsertRows(QModelIndex(), m_data.size(), m_data.size());
@@ -65,12 +65,14 @@ void Favorite::addCatImageList(QString id, QString url)
     }
 }
 
-void Favorite::addFavorite(QString image_id,int favorite_id)
+void Favorite::addFavorite(QString image_id,int favorite_id,QString url)
 {
-    qDebug()<<image_id;
+
+    //добавляем в список фаворитов
+    list_favorite.append(Cat{image_id,url,"red",favorite_id});
     for(int i=0;i<m_data.size();i++){
-        if(m_data[i].id == image_id){
-            qDebug()<<i;
+        if(m_data[i].id == image_id){//меняем данные если случайный котик в фаворитах
+            //qDebug()<<i;
             Cat* data = &m_data[i];
             data->color = "red";
             data->favorite_id = favorite_id;
@@ -81,22 +83,25 @@ void Favorite::addFavorite(QString image_id,int favorite_id)
     }
 }
 
-void Favorite::changeFavoriteState(int index, QString color)
-{
-    if(index<0 || index>=m_data.count())
-            return;
-        Cat* data = &m_data[index];
-        data->color = color;
-        QModelIndex change_index= createIndex(index, index, data);
-        emit dataChanged(change_index, change_index);
-}
+//void Favorite::changeFavoriteState(int index, QString color)
+//{
+//    if(index<0 || index>=m_data.count())
+//            return;
+//        Cat* data = &m_data[index];
+//        data->color = color;
+//        QModelIndex change_index= createIndex(index, index, data);
+//        emit dataChanged(change_index, change_index);
+//}
 
 void Favorite::postFavorite(int index,int id)
 {
     if(index<0 || index>=m_data.count())
             return;
+    //меняем данные и список фаворитов
     Cat* data = &m_data[index];
     data->favorite_id = id;
+    data->color="red";
+    list_favorite.append(Cat{data->id,data->image_url,"red",id});
     QModelIndex change_index= createIndex(index, index, data);
     emit dataChanged(change_index, change_index);
 
@@ -104,21 +109,46 @@ void Favorite::postFavorite(int index,int id)
 
 void Favorite::deleteFavorite(int index)
 {
+    //удаляем
+    qDebug()<<"delete";
     if(index<0 || index>=m_data.count())
             return;
     Cat* data = &m_data[index];
+    //int erase_ind=-1;
+    for(int i=0;i<list_favorite.count();i++){
+        if(data->favorite_id == list_favorite[i].favorite_id){
+            qDebug()<<data->favorite_id;
+            list_favorite.remove(i);
+        }
+    }
+
+
+    //изменяем модель
     data->favorite_id = 0;
     data->color = "lightgray";
+
     QModelIndex change_index= createIndex(index, index, data);
     emit dataChanged(change_index, change_index);
 }
 
-//void Favorite::changeColor(int index,QString color)
-//{
-//    if(index<0 || index>=m_data.count())
-//        return;
-//    Cat* data = &m_data[index];
-//    data->color = color;
-//    QModelIndex change_index= createIndex(index, index, data);
-//    emit dataChanged(change_index, change_index);
-//}
+void Favorite::onlyFavorite()
+{
+    //обнуляем и заново заполняем
+    null_size();
+
+    for(int i=0;i<list_favorite.count();i++){
+        beginInsertRows(QModelIndex(), m_data.size(), m_data.size());
+        m_data.append(list_favorite[i]);
+        endInsertRows();
+
+    }
+
+}
+
+void Favorite::null_size()
+{
+    //удаляем все строчки
+    beginRemoveRows(QModelIndex(),0, m_data.size());
+    m_data.resize(0);
+    endRemoveRows();
+}

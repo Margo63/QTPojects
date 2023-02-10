@@ -2,13 +2,23 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import Favorite 1.0
+
+/*
+В приложении используются get, post, del запросы
+функции js
+при запуске получаем изображения
+при нажатии на красную кнопку удаляем из фаворитов
+при нажатии на серую кнопку добавляем в фавориты
+
+*/
 Window {
     id:window
     width: 640
     height: 480
     visible: true
     title: qsTr("Favorite")
-    property string sub_id: "your-user-1234"
+    property string sub_id: ""//будем хранить пользователя
+    property bool cards:false //для контроля видимости
     function getCatModel(url){
             var request = new XMLHttpRequest()//js
             request.open("GET",url)   //открываем передавая тип запроса и сам url
@@ -23,10 +33,9 @@ Window {
                                    var cat_model = JSON.parse(request.responseText)
 
                                   for(var i=0;i<cat_model.length;i++){
+                                      //добавляем в модель
                                        favorite_model.addCatImageList(cat_model[i].id,cat_model[i].url)
                                    }
-                                  favorite_model.getted = "qwqwqw"
-
                               } else{
                                   console.log("ERROR ",request.status)//смотрим на HTTP код если что-то пошло не так
                               }
@@ -36,7 +45,6 @@ Window {
                      }
             request.send()//отправляем запрос
         }
-
     function favoriteRequest(req,url,index=null,body=null){
         var request = new XMLHttpRequest()//js
 
@@ -50,16 +58,18 @@ Window {
                       if (request.readyState === XMLHttpRequest.DONE) {
 
                           if (request.status && request.status === 200) {
-                              if(req==="GET"){//если делаем get запрос, то сохраняем модель
+                              if(req==="GET"){
                                  var model = JSON.parse(request.responseText)//получаем json из строки
                                   for(var i=0;i<model.length;i++){
-                                      favorite_model.addFavorite(model[i].image_id,model[i].id)
+                                      //добавляем в фавориты полученые из интернета
+                                      favorite_model.addFavorite(model[i].image_id,model[i].id,model[i].image.url)
                                   }
                               }
 
                               if(req==="POST"){//если делаем post запрос, то сохраняем id добавленной картинки
+                                 // отправляем в фавориты и сохраняем id
                                   var res = JSON.parse(request.responseText)
-                                  favorite_model.postFavorite(index,res['id'])
+                                  favorite_model.postFavorite(index,res['id'])//добавляем здесь тк иначе не получим сразу актуальный id
                               }
 
                               console.log("RESULT ", request.responseText);//выводим текст в консоль
@@ -77,6 +87,9 @@ Window {
 
 
 
+
+
+
     ScrollView{
         anchors.fill:parent
         Column{
@@ -86,9 +99,30 @@ Window {
 
             anchors.fill: parent
             spacing:10
+            TextInput{
+                id:text_input
+                width:250
+                height:50
+                text:"your-user-1234"//чтобы каждый раз не вводить
+                }
+            Button{
+                onClicked: {
+                    if (text_input.text!=""){//если не пусто
+                        window.cards= true//видимость карт
+                        window.sub_id = text_input.text//сохраняем id
+                        favoriteRequest("GET",'https://api.thecatapi.com/v1/favourites?sub_id='+sub_id)//получаем фаворитов из интернета
+                    }
+
+
+                }
+            }
+
             Repeater{
+                id:repeater
                 model:favorite_model
                 delegate: Rectangle{
+
+                    visible:window.cards
                     width:250
                     height:75
                     color:"lightblue"
@@ -120,22 +154,18 @@ Window {
                             MouseArea{
                                 anchors.fill:parent
                                 onClicked:{
-                                   // console.log(isFavorite)
                                     if(isFavorite==="red"){
-                                        //console.log("qqqqqqq")
+                                        //удаление
                                         favoriteRequest('DELETE',"https://api.thecatapi.com/v1/favourites/"+favorite_id)
-                                        favorite_model.changeFavoriteState(index,"lightgray");
+                                        favorite_model.deleteFavorite(index);
                                     }else
                                     if(isFavorite==="lightgray"){
-                                        //console.log("qllllll")
+                                        //добавление
                                          var body = {
                                                         "image_id":id,
                                                         "sub_id":window.sub_id
                                                     }
                                         favoriteRequest("POST",'https://api.thecatapi.com/v1/favourites',index,JSON.stringify(body))
-
-                                        favorite_model.changeFavoriteState(index,"red");
-
                                     }
                                 }
                             }
@@ -143,15 +173,36 @@ Window {
                     }
                 }
             }
+
+
+        }
+    }
+
+    Row{
+        width:parent.wodth
+        height:50
+        anchors.bottom:parent.bottom
+        Button{
+            text:"Favorites"
+            onClicked:{
+                if(text_input.text!=""&& text_input.text==window.sub_id)
+                    favorite_model.onlyFavorite()//получаем только фаворитов
+            }
+        }
+        Button{
+            text:"Change"
+            onClicked:{
+                if(text_input.text!=""&& text_input.text==window.sub_id){
+                    favorite_model.null_size()//обнуяем модель
+                    //получаем 10 случайных котиков
+                    getCatModel('https://api.thecatapi.com/v1/images/search?limit=10')
+                }
+            }
         }
     }
 
     Favorite{
         id:favorite_model
-        property var getted
-        onGettedChanged: {
-            console.log("oki")
-            favoriteRequest("GET",'https://api.thecatapi.com/v1/favourites?sub_id='+sub_id)
-        }
+
     }
 }
