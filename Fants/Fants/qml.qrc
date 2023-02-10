@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>FantCardPage.qml</file>
+        <file>ListDoneCardsPage.qml</file>
+    </qresource>
+</RCC>
