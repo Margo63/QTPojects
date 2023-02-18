@@ -1,2 +1,0 @@
-# QTPojects
-# ^_^
